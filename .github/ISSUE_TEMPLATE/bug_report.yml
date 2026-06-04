@@ -1,0 +1,56 @@
+name: Bug Report
+description: Report a Veil bug.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened?
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS Version
+      placeholder: "Example: macOS 15.5"
+    validations:
+      required: true
+  - type: input
+    id: hardware
+    attributes:
+      label: Mac Model
+      placeholder: "Example: MacBook Air 13-inch M4"
+    validations:
+      required: true
+  - type: textarea
+    id: display
+    attributes:
+      label: Display Setup
+      description: Built-in display, external displays, resolution/scaling, notch/rounded-corner behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: launch
+    attributes:
+      label: Launch Flags / Environment
+      description: Include flags such as --status-signals or VEIL_* environment variables.
+      render: sh
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+    validations:
+      required: true
+  - type: textarea
+    id: safety
+    attributes:
+      label: Safety Notes
+      description: Did this involve network traffic, process execution, fullscreen apps, screen sharing, or permissions prompts?

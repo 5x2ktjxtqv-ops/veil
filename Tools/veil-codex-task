@@ -1,0 +1,63 @@
+#!/bin/sh
+set -u
+
+usage() {
+    cat <<'EOF'
+Usage:
+  veil-codex-task [wrapper options] -- [codex args...]
+
+Wrapper options:
+  --status-file FILE  Task status JSON file.
+  --message TEXT      Compact user-owned status text.
+  -h, --help          Show this help.
+
+Example:
+  Tools/veil-codex-task --message "repo audit" -- exec "run tests and fix failures"
+EOF
+}
+
+status_file=""
+message="${VEIL_TASK_MESSAGE:-codex}"
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --status-file)
+            if [ "$#" -lt 2 ]; then
+                echo "veil-codex-task: --status-file requires a value" >&2
+                exit 64
+            fi
+            status_file="$2"
+            shift 2
+            ;;
+        --message)
+            if [ "$#" -lt 2 ]; then
+                echo "veil-codex-task: --message requires a value" >&2
+                exit 64
+            fi
+            message="$2"
+            shift 2
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        --)
+            shift
+            break
+            ;;
+        -*)
+            break
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+script_dir="$(CDPATH='' cd "$(dirname "$0")" && pwd)"
+
+if [ -n "$status_file" ]; then
+    exec "$script_dir/veil-task-run" --status-file "$status_file" --tool codex --message "$message" -- codex "$@"
+fi
+
+exec "$script_dir/veil-task-run" --tool codex --message "$message" -- codex "$@"

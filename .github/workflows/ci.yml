@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  swift:
+    name: Swift
+    runs-on: macos-15
+    steps:
+      - name: Check out
+        uses: actions/checkout@v6
+
+      - name: Swift version
+        run: swift --version
+
+      - name: Install audit tools
+        run: brew install gitleaks shellcheck swiftlint
+
+      - name: Secret scan
+        run: gitleaks detect --source . --no-git --redact --verbose
+
+      - name: SwiftLint
+        run: swiftlint lint --quiet
+
+      - name: ShellCheck
+        run: shellcheck Tools/veil-task-run Tools/veil-codex-task Tools/veil-claude-task Tests/Tools/task-status-wrapper-smoke.sh
+
+      - name: Python tool syntax
+        run: python3 -m py_compile Tools/fit-apple-display-corner.py Tools/fit-apple-notch-island.py
+
+      - name: Build
+        run: swift build
+
+      - name: Test
+        run: swift test
+
+      - name: Task status wrapper smoke
+        run: Tests/Tools/task-status-wrapper-smoke.sh
+
+      - name: Release build
+        run: swift build -c release
+
+      - name: Diff check
+        run: git diff --check

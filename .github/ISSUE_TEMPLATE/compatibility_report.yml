@@ -1,0 +1,44 @@
+name: Compatibility Report
+description: Report how Veil fits a specific Mac/display setup.
+title: "[Compatibility]: "
+labels: ["compatibility"]
+body:
+  - type: input
+    id: hardware
+    attributes:
+      label: Mac Model
+      placeholder: "Example: MacBook Pro 14-inch M3 Pro"
+    validations:
+      required: true
+  - type: input
+    id: macos
+    attributes:
+      label: macOS Version
+      placeholder: "Example: macOS 15.5"
+    validations:
+      required: true
+  - type: textarea
+    id: displays
+    attributes:
+      label: Display Setup
+      description: Include built-in/external displays, resolution, scaling, and menu bar location.
+    validations:
+      required: true
+  - type: dropdown
+    id: visual_fit
+    attributes:
+      label: Visual Fit
+      options:
+        - Looks aligned
+        - Slightly off
+        - Clearly wrong
+        - Did not render
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Mention notch capsule, bottom-corner mask, fullscreen behavior, sleep/wake, or screenshots if safe to share.
+    validations:
+      required: true
